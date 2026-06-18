@@ -2,9 +2,56 @@
 
 A web-based tool to scan large batches of PDF files for specific text — in the footer, header, body content, or the full document. Built to handle both scanned (image-based) and text-based PDFs, with OCR support for Hindi and English.
 
-**Live Demo:** `https://YOUR-VERCEL-URL.vercel.app` <!-- Replace after Vercel deployment -->  
-**API (Backend):** `https://YOUR-RENDER-URL.onrender.com/api/health` <!-- Replace after Render deployment -->  
+**Live Demo (Frontend):** https://smart-pdf-zone-scanner.vercel.app  
+**Backend API:** https://smart-pdf-zone-scanner.onrender.com/api/health  
 **GitHub:** https://github.com/Multi-meta/Smart_PDF_Zone_Scanner
+
+---
+
+## ⚠️ Note on Deployed Version Speed
+
+You can click the Live Demo link above and use it directly — it works completely.
+
+However, please be aware that the backend is hosted on **Render's free tier**, which provides only **0.1 vCPU** (shared CPU). Because of this:
+
+- The app may take **30–60 seconds to wake up** if it hasn't been used recently (Render puts free services to sleep after 15 minutes of inactivity)
+- Scanning PDFs that are image-based (scanned documents) will be **slower than normal** since OCR processing is CPU-intensive and the free plan has very limited compute
+- Text-based PDFs (with selectable text) are significantly faster
+
+**In short — it will run and give you correct results, it just takes more time than it would on a paid server.**
+
+---
+
+## 🚀 Want Faster Performance? Run It Locally
+
+Clone the project from GitHub and run it on your own machine — it will be much faster since it uses your full CPU.
+
+```powershell
+git clone https://github.com/Multi-meta/Smart_PDF_Zone_Scanner.git
+cd Smart_PDF_Zone_Scanner
+```
+
+Then run these commands one by one in your terminal:
+
+```powershell
+npm run setup:windows
+```
+
+If you also need Tesseract, Poppler, and Python installed automatically:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-windows.ps1 -InstallTools
+```
+
+Then start the app:
+
+```powershell
+npm start
+```
+
+Open `http://localhost:3000` in your browser — done.
+
+> The `requirements.txt` file is already included. The setup script handles Python packages, folder creation, and environment setup automatically.
 
 ---
 
@@ -18,31 +65,8 @@ A web-based tool to scan large batches of PDF files for specific text — in the
 
 ---
 
-## Quick Start (Windows)
 
-Clone the repo and run the setup script. It handles everything automatically.
 
-```powershell
-git clone https://github.com/Multi-meta/Smart_PDF_Zone_Scanner.git
-cd Smart_PDF_Zone_Scanner
-npm run setup:windows
-npm start
-```
-
-Open `http://localhost:3000` in your browser.
-
-**To also install system tools (Tesseract, Poppler, Python) automatically:**
-```powershell
-npm run setup:windows:install
-```
-
-Or run the PowerShell script directly:
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\setup-windows.ps1
-powershell -ExecutionPolicy Bypass -File .\scripts\setup-windows.ps1 -InstallTools
-```
-
----
 
 ## What the setup script does
 
