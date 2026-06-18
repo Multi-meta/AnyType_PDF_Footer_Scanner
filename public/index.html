@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Scan PDF files for specific text in footer, header, content or full document. Supports Hindi and English." />
+    <title>PDF Scanner — Footer · Header · Content · Full</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <span style="font-size: 2.8rem">📄</span>
+          PDF Zone Scanner
+        </h1>
+        <p>Search for text in a specific zone of your PDFs — footer, header, content or entire document</p>
+      </header>
+
+      <div class="main-card">
+        <div class="upload-section">
+
+          <!-- ① Search Text -->
+          <div class="search-section">
+            <label class="upload-label" for="targetTextInput">🔍 Text to Search</label>
+            <div class="search-input-wrap">
+              <input
+                type="text"
+                id="targetTextInput"
+                class="search-input"
+                placeholder="e.g. प्रपत्र - 1 (अंतिम प्रकाशन 2026)  or  Certificate of Completion"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <span class="search-hint">Type in English or Hindi (हिन्दी)</span>
+            </div>
+          </div>
+
+          <!-- ② Search Zone -->
+          <div class="zone-section">
+            <label class="upload-label">📐 Search Zone</label>
+            <div class="zone-selector" role="group" aria-label="Search zone">
+
+              <input type="radio" name="searchMode" id="mode-footer"  value="footer"  class="zone-radio" checked />
+              <label for="mode-footer" class="zone-card">
+                <span class="zone-icon">⬇️</span>
+                <span class="zone-name">Footer</span>
+                <span class="zone-desc">Last page · bottom 2 in</span>
+              </label>
+
+              <input type="radio" name="searchMode" id="mode-header"  value="header"  class="zone-radio" />
+              <label for="mode-header" class="zone-card">
+                <span class="zone-icon">⬆️</span>
+                <span class="zone-name">Header</span>
+                <span class="zone-desc">First page · top 5 in</span>
+              </label>
+
+              <input type="radio" name="searchMode" id="mode-content" value="content" class="zone-radio" />
+              <label for="mode-content" class="zone-card">
+                <span class="zone-icon">📝</span>
+                <span class="zone-name">Content</span>
+                <span class="zone-desc">All pages · body area</span>
+              </label>
+
+              <input type="radio" name="searchMode" id="mode-entire"  value="entire"  class="zone-radio" />
+              <label for="mode-entire" class="zone-card">
+                <span class="zone-icon">📋</span>
+                <span class="zone-name">Entire PDF</span>
+                <span class="zone-desc">All pages · full text</span>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- ③ File Picker -->
+          <label class="upload-label">📂 Select PDF Files or Folder to Scan</label>
+
+          <div class="drop-zone" id="dropZone">
+            <div class="icon">📁</div>
+            <p>
+              <strong>Select files/folder</strong> or
+              <strong>drag and drop</strong> PDF files here
+            </p>
+            <p style="font-size: 0.9rem; color: #555">
+              Scans PDFs directly inside the folder and all subfolders
+            </p>
+          </div>
+
+          <input type="file" id="fileInput"   class="file-input" multiple accept=".pdf" />
+          <input type="file" id="folderInput" class="file-input" multiple webkitdirectory directory />
+
+          <div class="picker-actions">
+            <button type="button" class="picker-btn" id="chooseFilesBtn">Select PDF Files</button>
+            <button type="button" class="picker-btn" id="chooseFolderBtn">Select Folder</button>
+          </div>
+
+          <div class="selected-files" id="selectedFiles" style="display: none">
+            <h3>📎 Selected Files:</h3>
+            <p class="selection-summary" id="selectionSummary"></p>
+            <div class="file-list" id="fileList"></div>
+          </div>
+
+          <div class="button-group">
+            <button class="scan-btn" id="scanBtn" disabled>🔍 Scan PDFs</button>
+            <button class="clear-btn" id="clearBtn">🗑️ Clear</button>
+          </div>
+        </div>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p id="loadingMsg">Scanning PDFs... Please wait</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="results-section" id="resultsSection">
+          <h2 style="margin-bottom: 20px; color: #003d99">📊 Scan Results</h2>
+
+          <div class="stats" id="stats"></div>
+
+          <div class="results-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>File Name</th>
+                  <th>Pages</th>
+                  <th>Status</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="resultsTable"></tbody>
+            </table>
+          </div>
+
+          <div class="timestamp" id="timestamp"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

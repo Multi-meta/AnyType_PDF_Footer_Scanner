@@ -1,0 +1,8 @@
+# Python dependencies for PDF Footer Scanner
+# Install with: pip install -r requirements.txt
+
+# PDF reading and page extraction
+pypdf>=4.0.0
+
+# Image processing (crop, enhance, save zone images)
+Pillow>=10.0.0

@@ -1,0 +1,21 @@
+# Docker ignore — keep the Docker build context small and fast
+# Mirrors .gitignore but also excludes dev-only files
+
+node_modules/
+uploads/
+results/
+*.pdf
+*.exe
+*.traineddata
+.env
+.env.*
+!.env.example
+.git/
+.gitignore
+.vscode/
+.vs/
+*.md
+!README.md
+scan_footer.cpp
+scan_footer.exe
+scan_pdfs.exe
