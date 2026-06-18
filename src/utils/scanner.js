@@ -301,23 +301,19 @@ const renderPage = async (filePath, pageNum, tempDir) => {
 // ── OCR ──────────────────────────────────────────────────────────────────────
 
 const ocrImageWithNativeTesseract = async (imagePath) => {
-  const psmModes = ["6", "11", "12"];
-  const parts = [];
-
-  for (const psm of psmModes) {
-    try {
-      const text = await runCommandIfAvailable(
-        "tesseract",
-        [imagePath, "stdout", "-l", "hin+eng", "--psm", psm],
-        { timeout: 120000 },
-      );
-      if (text && text.trim()) parts.push(text);
-    } catch (error) {
-      console.log(`  Native Tesseract OCR failed for PSM ${psm}: ${error.message}`);
-    }
+  // Single-pass OCR with PSM 6 (uniform block of text) — fastest reliable mode.
+  // PSM 11/12 multi-pass was 3× slower and rarely improved results.
+  try {
+    const text = await runCommandIfAvailable(
+      "tesseract",
+      [imagePath, "stdout", "-l", "hin+eng", "--psm", "6"],
+      { timeout: 60000 },
+    );
+    return text || "";
+  } catch (error) {
+    console.log(`  Native Tesseract OCR failed: ${error.message}`);
+    return "";
   }
-
-  return parts.join("\n");
 };
 
 const ocrImage = async (imagePath) => {
@@ -439,16 +435,8 @@ const scanPDF = async (filePath, originalName, index, targetText, searchMode = "
           );
           zoneText = await ocrImage(pageEntry.zone_path);
 
-          // For footer/header, if zone crop didn't match, try the full raw image too
-          if (
-            !footerContainsSearchText(zoneText, targetText) &&
-            pageEntry.raw_path &&
-            (mode === "footer" || mode === "header")
-          ) {
-            console.log("  Zone crop missed, checking full raw page image...");
-            const fullText = await ocrImage(pageEntry.raw_path);
-            zoneText += "\n" + getZoneText(fullText, mode);
-          }
+          // Note: double-OCR fallback removed for performance.
+          // The zone crop at 2× scale is sufficient for footer/header detection.
         } else {
           // No embedded image captured – try pdftoppm for this page
           try {

@@ -29,15 +29,27 @@ const handleScan = async (req, res) => {
   const runId = new Date().toISOString().replace(/[:.]/g, "-");
 
   try {
-    for (let i = 0; i < uploadedFiles.length; i++) {
-      const result = await scanPDF(
-        uploadedFiles[i],
-        (submittedPaths[i] || req.files[i].originalname).replace(/\\/g, "/"),
-        i,
-        targetText,
-        searchMode,
+    // Scan PDFs in parallel (up to 4 at once) instead of sequentially.
+    // For 2 PDFs this roughly halves the total wait time.
+    const CONCURRENCY = 4;
+    const chunks = [];
+    for (let i = 0; i < uploadedFiles.length; i += CONCURRENCY) {
+      chunks.push(uploadedFiles.slice(i, i + CONCURRENCY).map((_, j) => i + j));
+    }
+
+    for (const chunk of chunks) {
+      const chunkResults = await Promise.all(
+        chunk.map((i) =>
+          scanPDF(
+            uploadedFiles[i],
+            (submittedPaths[i] || req.files[i].originalname).replace(/\\/g, "/"),
+            i,
+            targetText,
+            searchMode,
+          )
+        )
       );
-      results.push(result);
+      results.push(...chunkResults);
     }
 
     const saved = saveScanResults(results, scanDate, runId, targetText, searchMode);

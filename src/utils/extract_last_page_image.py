@@ -49,10 +49,10 @@ CROP_ZONES = {
     "entire":  (0.000, 1.000),
 }
 
-# Upscale factors for OCR – smaller zones need more upscale.
+# Upscale factors for OCR – 2x is sufficient for accurate OCR and much faster than 4x.
 SCALE_FACTORS = {
-    "footer":  4,
-    "header":  3,
+    "footer":  2,
+    "header":  2,
     "content": 2,
     "entire":  1,
 }
